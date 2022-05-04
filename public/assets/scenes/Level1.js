@@ -4,7 +4,14 @@ export default class Level1 extends Phaser.Scene {
 			key: 'Level1'
 		});
 	}
-	preload() {}
-	create() {}
+
+	
+	preload() {
+
+	}
+
+	create() {
+		
+	}
 	update(time, delta) {}
 }

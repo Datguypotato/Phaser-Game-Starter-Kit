@@ -19,6 +19,10 @@ I broke it down in simple steps to get you going.
 	https://atom.io/
 
  **Install all the node packages** 
+ **Update**
+in case we got dependency errors delete node module folder
+and reset the shrinkwrap file
+
 On the root of this project run on your terminal (if you want you can do this with yarn but thats optional)
 ```bash
     npm install

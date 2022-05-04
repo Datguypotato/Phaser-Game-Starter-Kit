@@ -10,58 +10,128 @@ export default class Intro extends Phaser.Scene {
 			'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js'
 		);
 
-		var progress = this.add.graphics();
-		const self = this;
-		this.load.on('progress', function(value) {
-			progress.clear();
-			progress.fillStyle(0x42f456, 1);
-			progress.fillRect(0, 300, 800 * value, 20);
+		const titlescreenPath = '/assets/sprites/titlescreen/';
+		this.load.image('background', titlescreenPath + 'background.png');
+		this.load.image('bgBox', titlescreenPath + 'bgbox.png');
+		this.load.image('champTitle', titlescreenPath + 'championshipstitle.png');
+		this.load.image('startButton', titlescreenPath + 'startbutton.png');
+		this.load.image('tictactoeTitle', titlescreenPath + 'tictactoetitle.png');
+		this.load.image('title', titlescreenPath + 'title.png');
+
+		this.load.audio('introMusic', '/assets/audio/01-Opening.ogg');
+	}
+
+	create() {
+		/*
+		========================================================================
+			audio
+		========================================================================
+		*/
+
+		this.introMusic = this.sound.add('introMusic', {
+			loop: true
+		});
+		// uncomment this in the future
+		//this.introMusic.play();
+
+		/*
+		========================================================================
+			Creating images
+		========================================================================
+		*/
+		this.background = this.add.image(0, 0, 'background').setOrigin(0);
+		this.bgBox = this.add
+			.image(0, 0, 'bgBox')
+			.setOrigin(0)
+			.setAlpha(0);
+		this.title = this.add
+			.image(this.game.config.width / 2, 80, 'title')
+			.setAlpha(0);
+		this.tictactoe = this.add
+			.image(this.game.config.width / 2, 150, 'tictactoeTitle')
+			.setAlpha(0);
+		this.champTitle = this.add
+			.image(this.game.config.width / 2, 175, 'champTitle')
+			.setAlpha(0);
+		this.startButton = this.add
+			.image(this.game.config.width / 2, 250, 'startButton')
+			.setAlpha(0);
+
+		/*
+		========================================================================
+			Creating animations
+		========================================================================
+		*/
+
+		this.tweens.add({
+			targets: this.bgBox,
+			ease: 'Linear',
+			alpha: 0.5,
+			delay: 1000,
+			duration: 1000
 		});
 
-		this.load.on('complete', function() {
-			progress.destroy();
-		});
-	}
-	create() {
-		this.make.text({
-			x: 250,
-			y: 300,
-			text: 'Press Space Bar',
-			style: {
-				fontSize: '20px',
-				fontFamily: 'Arial',
-				color: '#ffffff',
-				align: 'center',
-				backgroundColor: '#000000',
-				shadow: {
-					color: '#000000',
-					fill: true,
-					offsetX: 2,
-					offsetY: 2,
-					blur: 8
+		this.tweens.timeline({
+			targets: this.title,
+			ease: 'Linear', // 'Cubic', 'Elastic', 'Bounce', 'Back'
+			duration: 1000,
+			loop: 0,
+
+			tweens: [
+				{
+					targets: this.title,
+					alpha: 1,
+					y: 90,
+					delay: 1000,
+					duration: 1000
+				},
+				{
+					targets: this.title,
+					alpha: 1,
+					y: 100,
+					repeat: -1,
+					yoyo: true,
+					delay: 0,
+					duration: 600
 				}
-			}
+			]
 		});
-		var add = this.add;
-		var input = this.input;
-		WebFont.load({
-			google: {
-				families: ['Fredericka the Great']
-			},
-			active: function() {
-				add
-					.text(75, 100, `Phaser 3 Starter Kit`, {
-						fontFamily: 'Fredericka the Great',
-						fontSize: 50,
-						color: '#ffffff'
-					})
-					.setShadow(2, 2, '#333333', 2, false, true);
-			}
+
+		this.tweens.add({
+			targets: this.tictactoe,
+			ease: 'Linear',
+			y: this.tictactoe.y + 10,
+			alpha: 1,
+			delay: 1100,
+			duration: 1000
 		});
-		this.keys = this.input.keyboard.addKeys('SPACE');
+
+		this.tweens.add({
+			targets: this.champTitle,
+			ease: 'Linear',
+			y: this.champTitle.y + 10,
+			alpha: 1,
+			delay: 1300,
+			duration: 1000
+		});
+
+		this.tweens.add({
+			targets: this.startButton,
+			ease: 'Linear',
+			y: this.startButton.y + 10,
+			alpha: 1,
+			delay: 1600,
+			duration: 1000
+		});
+
+		this.startButton.setInteractive().on('pointerdown', () => {
+			this.scene.start('Level1');
+		});
+
+		this.keys = this.input.keyboard.addKeys('SPACE,ENTER');
 	}
 	update(delta) {
-		if (this.keys.SPACE.isDown) {
+		if (this.keys.SPACE.isDown || this.keys.ENTER.isDown) {
 			this.scene.start('Level1');
 		}
 	}
