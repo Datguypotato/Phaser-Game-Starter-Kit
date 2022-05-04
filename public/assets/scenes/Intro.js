@@ -32,7 +32,7 @@ export default class Intro extends Phaser.Scene {
 			loop: true
 		});
 		// uncomment this in the future
-		//this.introMusic.play();
+		this.introMusic.play();
 
 		/*
 		========================================================================
@@ -124,15 +124,27 @@ export default class Intro extends Phaser.Scene {
 			duration: 1000
 		});
 
+		/*
+		========================================================================
+			inputs
+		========================================================================
+		*/
+
 		this.startButton.setInteractive().on('pointerdown', () => {
-			this.scene.start('Level1');
+			this.StartGame(this.introMusic)
 		});
 
 		this.keys = this.input.keyboard.addKeys('SPACE,ENTER');
 	}
 	update(delta) {
 		if (this.keys.SPACE.isDown || this.keys.ENTER.isDown) {
-			this.scene.start('Level1');
+			this.StartGame(this.introMusic)
 		}
+	}
+
+	StartGame(music) {
+		music.stop();
+		this.scene.start('Level1');
+		
 	}
 }
